@@ -101,31 +101,47 @@ medical-report-simplifier/
 
 ## 🚀 How to Run the Project
 
-1️⃣ Clone the repository
+1️⃣ **Clone the repository**
 
 ```bash
 git clone https://github.com/AryanDemi/NLP-Project-.4.git
+cd NLP-Project-.4
 ```
 
-2️⃣ Navigate to the project directory
+2️⃣ **Install Tesseract OCR (Crucial)**
+The text extraction relies on the Tesseract OCR engine.
+* **Windows**: Download the installer from [UB-Mannheim](https://github.com/UB-Mannheim/tesseract/wiki) and install it. Make sure the path matches `C:\Program Files\Tesseract-OCR\tesseract.exe` (or update it in `medical_report_simplifier.py`).
+* **Mac/Linux**: Install via `brew install tesseract` or `sudo apt install tesseract-ocr`.
 
-```bash
-cd medical-report-simplifier
-```
-
-3️⃣ Install required libraries
+3️⃣ **Install Python Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4️⃣ Run the notebook or application
-
-```bash
-jupyter notebook
+4️⃣ **Set up API Keys**
+Rename the `.env.example` file to `.env` and add your Gemini API Key:
+```env
+GEMINI_API_KEY=your_actual_api_key_here
 ```
 
-Open **medical_report_simplifier.ipynb** and run all cells.
+5️⃣ **Run the Application**
+
+You have three ways to run this project:
+
+**Option A: Web Interface (Recommended)**
+```bash
+python -m streamlit run app.py
+```
+This opens a beautiful frontend in your browser where you can upload your report directly.
+
+**Option B: Standalone Script**
+```bash
+python medical_report_simplifier.py "path/to/your_report.pdf"
+```
+
+**Option C: Jupyter Notebook**
+Open `Medical_Report_Simplifier.ipynb` in your preferred editor (VS Code, JupyterLab), change the file path in the last cell, and run all cells.
 
 ---
 
@@ -154,11 +170,10 @@ Example:
 
 ## 🔍 Future Improvements
 
-* Support for **PDF medical reports**
 * Better **medical entity recognition**
 * Integration with **medical knowledge graphs**
-* Development of a **web interface for patients**
 * Improved accuracy using **larger medical datasets**
+* Multi-language support for diverse patient backgrounds
 
 ---
 
