@@ -104,7 +104,7 @@ medical-report-simplifier/
 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/medical-report-simplifier.git
+git clone https://github.com/AryanDemi/NLP-Project-.4.git
 ```
 
 2️⃣ Navigate to the project directory
