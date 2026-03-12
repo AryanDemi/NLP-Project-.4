@@ -72,33 +72,6 @@ pip install -r requirements.txt
 
 ---
 
-## 📂 Project Structure
-
-```
-medical-report-simplifier/
-│
-├── dataset/
-│   └── medical_terms_dataset.csv
-│
-├── images/
-│   └── sample_reports/
-│
-├── notebooks/
-│   └── medical_report_simplifier.ipynb
-│
-├── models/
-│   └── trained_model.pkl
-│
-├── utils/
-│   └── preprocessing.py
-│
-├── requirements.txt
-├── README.md
-└── app.py
-```
-
----
-
 ## 🚀 How to Run the Project
 
 1️⃣ **Clone the repository**
@@ -134,52 +107,6 @@ You have three ways to run this project:
 python -m streamlit run app.py
 ```
 This opens a beautiful frontend in your browser where you can upload your report directly.
-
-**Option B: Standalone Script**
-```bash
-python medical_report_simplifier.py "path/to/your_report.pdf"
-```
-
-**Option C: Jupyter Notebook**
-Open `Medical_Report_Simplifier.ipynb` in your preferred editor (VS Code, JupyterLab), change the file path in the last cell, and run all cells.
-
----
-
-## 📊 Example Workflow
-
-Input:
-
-* Upload CBC report image
-
-System Processing:
-
-* Extracts text using OCR
-* Detects terms like *Hemoglobin*, *WBC*, *Platelets*
-
-Output:
-
-* Simplified explanations such as:
-
-Example:
-
-* **Hemoglobin:** Protein in blood that carries oxygen.
-* **Low Hemoglobin:** May indicate anemia.
-* **Advice:** Consult a doctor if levels are significantly below normal.
-
----
-
-## 🔍 Future Improvements
-
-* Better **medical entity recognition**
-* Integration with **medical knowledge graphs**
-* Improved accuracy using **larger medical datasets**
-* Multi-language support for diverse patient backgrounds
-
----
-
-## ⚠️ Disclaimer
-
-This system provides **general informational explanations only** and should **not replace professional medical advice**. Always consult a qualified healthcare professional for diagnosis and treatment.
 
 ---
 
