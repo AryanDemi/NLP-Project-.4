@@ -111,6 +111,24 @@ IMPORTANT: Maintain a supportive and objective tone. Add a disclaimer that you a
     response = model.generate_content(prompt)
     return response.text
 
+def get_brief_summary(text):
+    """Generates a very short, easy to understand summary of the report."""
+    if not api_key:
+        return "Error: API key not configured. Cannot call LLM."
+
+    prompt = f"""
+You are a helpful medical assistant. Please provide a very brief, and highly simplified summary (3-4 sentences maximum) of the following medical report findings.
+Focus only on the most important takeaways and overall health status, tailored for a patient with no medical background:
+
+\"\"\"
+{text}
+\"\"\"
+"""
+    
+    print("Sending request to LLM to generate a brief summary...")
+    response = model.generate_content(prompt)
+    return response.text
+
 def process_medical_report(file_path):
     """Main pipeline to process a single medical report."""
     print(f"\n--- Processing {file_path} ---")
