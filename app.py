@@ -5,7 +5,7 @@ from PIL import Image
 
 # Import the logic from our script
 # Note: we are importing functions, not running the CLI block
-from medical_report_simplifier import extract_text, extract_and_embed_medical_terms, simplify_medical_report
+from medical_report_simplifier import extract_text, extract_and_embed_medical_terms, simplify_medical_report, get_brief_summary
 
 # Configure Streamlit page
 st.set_page_config(
@@ -49,8 +49,12 @@ if uploaded_file is not None:
                 terms, _ = extract_and_embed_medical_terms(raw_text)
                 
                 # Step 3: LLM Simplification
-                st.text("🤖 Generating simplified explanation...")
+                st.text("Generating simplified explanation...")
                 simplified_output = simplify_medical_report(raw_text, terms)
+                
+                # Step 4: Brief Summary
+                st.text("Generating brief summary...")
+                brief_summary = get_brief_summary(simplified_output)
                 
                 # Clean up temporary file
                 os.remove(tmp_file_path)
@@ -58,8 +62,16 @@ if uploaded_file is not None:
                 # Display Results
                 st.success("Analysis Complete!")
                 st.markdown("---")
-                st.subheader("🧾 Simplified Medical Report")
-                st.markdown(simplified_output)
+                
+                tab1, tab2 = st.tabs(["📝 Brief Summary", "🧾 Detailed Simplified Report"])
+                
+                with tab1:
+                    st.subheader("📝 Brief Summary")
+                    st.info(brief_summary)
+                    
+                with tab2:
+                    st.subheader("🧾 Detailed Simplified Report")
+                    st.markdown(simplified_output)
                 
                 with st.expander("View Raw Extracted Text (For Reference)"):
                     st.text(raw_text)
