@@ -5,7 +5,7 @@ from PIL import Image
 
 # Import the logic from our script
 # Note: we are importing functions, not running the CLI block
-from medical_report_simplifier import extract_text, extract_and_embed_medical_terms, simplify_medical_report, get_brief_summary
+from medical_report_simplifier import extract_text, extract_and_embed_medical_terms, simplify_medical_report, get_brief_summary, check_if_medical_report
 
 # Configure Streamlit page
 st.set_page_config(
@@ -44,7 +44,21 @@ if uploaded_file is not None:
                 st.text("📝 Extracting text via OCR...")
                 raw_text = extract_text(tmp_file_path)
                 
-                # Step 2: Extract Terms
+                if not raw_text:
+                    st.error("upload a valid medical report")
+                    os.remove(tmp_file_path)
+                    st.stop()
+                    
+                # Step 2: Validate Document
+                st.text("🔍 Checking if document is a medical report...")
+                is_medical = check_if_medical_report(raw_text)
+                
+                if not is_medical:
+                    st.error("upload a valid medical report")
+                    os.remove(tmp_file_path)
+                    st.stop()
+                
+                # Step 3: Extract Terms
                 st.text("🧬 Finding medical terminology...")
                 terms, _ = extract_and_embed_medical_terms(raw_text)
                 

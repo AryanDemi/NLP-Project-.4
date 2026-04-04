@@ -47,8 +47,7 @@ ner_pipeline = pipeline("ner", model="d4data/biomedical-ner-all", tokenizer="d4d
 
 # --- 3. Core Functions ---
 def extract_text(file_path):
-    """Extracts text from a given PDF or Image file using Tesseract OCR."""
-    print("Extracting text from document...")
+    print("extracting text from document...")
     text = ""
     if file_path.lower().endswith('.pdf'):
         pages = convert_from_path(file_path)
@@ -59,7 +58,22 @@ def extract_text(file_path):
         text = pytesseract.image_to_string(image)
     else:
         raise ValueError("Unsupported file format. Please provide a PDF or image file (.png, .jpg, .jpeg, etc.).")
-    return text
+    return text.strip()
+
+def check_if_medical_report(text):
+    # doing a quick LLM check to filter out random images like receipts or cat photos
+    if not api_key:
+        return False
+        
+    prompt = f"""
+    Look at the following parsed text. Is this mostly a medical report, clinical lab result, or doctor's prescription?
+    Reply with ONLY the word YES or NO. Nothing else.
+    
+    Text: {text[:2000]}  # passing first 2k chars just in case it's huge
+    """
+    response = model.generate_content(prompt)
+    answer = response.text.strip().upper()
+    return 'YES' in answer
 
 def extract_and_embed_medical_terms(text):
     """Extracts medical terms using NER and generates their BioBERT embeddings."""
@@ -131,17 +145,26 @@ Focus only on the most important takeaways and overall health status, tailored f
 
 def process_medical_report(file_path):
     """Main pipeline to process a single medical report."""
-    print(f"\n--- Processing {file_path} ---")
+    print(f"\n--- processing {file_path} ---")
     try:
         # 1. OCR
         raw_text = extract_text(file_path)
-        print("✅ Text successfully extracted.")
+        if not raw_text:
+            print("upload a valid medical report")
+            return
+            
+        # 2. Check if valid
+        print("validating document type...")
+        is_medical = check_if_medical_report(raw_text)
+        if not is_medical:
+            print("upload a valid medical report")
+            return
         
-        # 2. Term Extraction & Embedding
+        # 3. Term Extraction & Embedding
         terms, embeddings = extract_and_embed_medical_terms(raw_text)
-        print(f"✅ Extracted {len(terms)} medical terms and generated their embeddings.")
+        print(f"extracted {len(terms)} medical terms and generated their embeddings.")
         
-        # 3. LLM Simplification
+        # 4. LLM Simplification
         simplified_output = simplify_medical_report(raw_text, terms)
         
         print("\n==================================================")
